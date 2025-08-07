@@ -12,11 +12,21 @@ export const TodoModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (!currentTodo) {
       return;
     }
 
-    getUser(currentTodo.userId).then(setUser);
+    getUser(currentTodo.userId).then(data => {
+      if (isMounted) {
+        setUser(data);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [currentTodo]);
 
   const clearCurrentTodo = () => {

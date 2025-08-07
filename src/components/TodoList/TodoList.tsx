@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { todosSlice } from '../../features/todos';
 import { currentTodoSlice } from '../../features/currentTodo';
-import { getTodos } from '../../api';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 
@@ -13,17 +11,6 @@ export const TodoList: React.FC = () => {
   const query = useAppSelector(state => state.filter.query);
   const status = useAppSelector(state => state.filter.status);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    getTodos()
-      .then(res => {
-        dispatch(todosSlice.actions.fetchTodos(res));
-      })
-      .catch(e => {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos', e);
-      });
-  }, [dispatch]);
 
   const addTodo = (todo: Todo) => {
     dispatch(currentTodoSlice.actions.addTodo(todo));
